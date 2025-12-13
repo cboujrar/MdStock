@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}
+    <title>Gestion Privilège</title>
+  {% endblock %}
+  {% block stylsheets %}
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
+     <link rel="stylesheet" href="{{ asset('main/css/main.css')}}">
+
+    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+    <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+  {% endblock %}
+  
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+<div class="my-loader">
+<img src="{{asset("main/loader.gif")}}" >
+</div>
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      {# <li class="nav-item d-none d-sm-inline-block">
+        <a href="../../index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li> #}
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      {# <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li> #}
+
+  <!-- Messages Dropdown Menu -->
+    {{ include("include/dropdown_message.html.twig") }}
+
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+             {{ include("include/nav.html.twig") }}
+    <!-- /.sidebar -->
+  </aside>
+
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Privilège</h1>
+          </div>
+          {# <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Privilège</li>
+            </ol>
+          </div> #}
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Gestion des Privilège</h3>
+            <div class="float-right">
+                {# <button class="btn btn-info" onclick="window.location.reload()" ><span> <i class="fas fa-sync-alt"></i></span> Recharger </button> #}
+                <button class="btn btn-success" id="btn_new_privilege" > Ajouter <span><i class="fas fa-plus"></i> </span></button>
+            </div>
+        </div>
+        <div class="card-body">
+             <table id="table_privilege" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Privilège </th>
+                      {# <th>Utilisateur </th>
+                      <th>Date </th>
+                      <th class="datatable-nosort">Operations </th> #}
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for privilege in privileges %}
+                      <tr> 
+                        <td data-id ="{{privilege.id}}" class="priv"> {{privilege.titre}}</td>
+                        {# <td> {{privilege.idUtilisateur.nom}}</td>
+                        <td> {{privilege.dateAdd}}</td> #}
+                        {# <td> 
+                          <button data-id="{{privilege.id}}" class="btn btn-primary btn_update_article"> <span><i class="fas fa-pencil-alt"></i> </span></button>
+                          <button data-id="{{privilege.id}}" class="btn btn-danger btn_delete_article" > <span><i class="fas fa-trash"></i> </span></button>
+                        </td> #}
+                      
+                    </tr>
+                    </tr>
+                  {% endfor %}
+
+                  </tbody>
+                </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+     {# start madal #}
+ <div class="modal fade" id="modal_new_privilege" tabindex="-1" role="dialog" aria-labelledby="newArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+              <h4 class="modal-title">Nouveau Privilège</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="form_new_privilege">
+                <div class="modal-body">
+
+                <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="utilisateur">Utilisateur</label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <select class="form-control select2" id="userPrivAddBtn" name="utilisateur">
+                              <option value=""> -- </option>
+                                {% for u in utilisateur %}
+                                <option value="{{u.id}}">{{u.nom}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        {# <div class="form-group col-md-4">
+                            <label for="privilege">Privilège</label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <select class="form-control select2" name="privilege" >
+                              <option value=""> -- </option>
+                                {% for p in privilege %}
+                                <option value="{{p.id}}">{{p.libPriv}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> #}
+                        <div class="form-group col-md-12">
+                           <div class="row" id="listPrivUser">
+                                {# {% for p in privilege %}
+                                <div class="col-4">
+                                <input type="checkbox" value="{{p.id}}" name="privid[]">
+                                <label> {{p.libPriv}}</label>
+                                </div>
+                                {% endfor %} #}
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    {# <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="date">Date</label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="date" class="form-control" name="date">
+                        </div>
+                    </div> #}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+      {# end modal #}
+
+
+ {# start madal #}
+ <div class="modal fade" id="modal_privilege_infos" tabindex="-1" role="dialog" aria-labelledby="newArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h4 class="modal-title">Liste des utilisateurs</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                 <table id="table_privilege_utilisateur" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Utilisateur </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  </tbody>
+                </table>
+                    
+            </div>
+        </div>
+    </div>
+</div>
+
+      {# end modal #}
+
+    <footer class="main-footer">
+      {# <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.2.0
+      </div> #}
+      <strong>Copyright &copy; 2024 <a href="http://127.0.0.1:8000/">Marrakech Distribution</a>.</strong> All rights reserved.
+    </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- jQuery -->
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+
+  <!-- DataTables  & Plugins -->
+  <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+  <script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+  <script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+  <script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+  <script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+  <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+  <script>  
+  const url = `{{path('new_article')}}`
+  const url_delete = `{{path('delete_article',{id:'pid'})}}`
+  const url_update = `{{path('update_article')}}`
+  const url_info = `{{path('info_article')}}`
+  </script>
+  <!-- Inclure SweetAlert via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    let url_privU = `{{path("new_privilege_utilisateur")}}`;
+    let url_getPriv = `{{path("privilege_utilisateur")}}`;
+    let url_privUser_infos = `{{path("privilege_utilisateur_infos")}}`;
+ </script>
+
+  <script src="{{asset('main/js/privilege.js')}}"> </script>   
+  <!-- Bootstrap 4 -->
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{{asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
+  <script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2({
+      theme: 'bootstrap4'
+    })})
+</script>
+</body>
+</html>

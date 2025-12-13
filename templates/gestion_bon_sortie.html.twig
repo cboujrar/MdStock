@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}
+    <title>Gestion Bon Sortie</title>
+  {% endblock %}
+  {% block stylsheets %}
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('main/css/main.css')}}">
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('main/css/main.css')}}">
+    
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
+
+    <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+  {% endblock %}
+{# <style>
+.my-loader{
+      background: rgb(0,0,0,.3);
+    position: relative;
+    position: absolute;
+    z-index: 9999999999;
+    height: 100%;
+    /* left: 40%; */
+    /* top: 40%; */
+    width: 100%;
+    display:none
+}
+.my-loader img{
+     position: absolute;
+     left: 40%; 
+     top: 40%; 
+}
+</style> #}
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+
+{# loader #}
+{# <div class="mycss_loader_paren">
+  <div class="cssload-container">
+    <div class="cssload-circle"></div>
+    <div class="cssload-circle"></div>
+  </div>
+</div> #}
+<div class="my-loader">
+<img src="{{asset("main/loader.gif")}}" >
+</div>
+
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      {# <li class="nav-item d-none d-sm-inline-block">
+        <a href="../../index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li> #}
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      {# <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li> #}
+
+      <!-- Messages Dropdown Menu -->
+    {{ include("include/dropdown_message.html.twig") }}
+
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+             {{ include("include/nav.html.twig") }}
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Bon Sortie</h1>
+          </div>
+             <div class="col-sm-6">
+            {% for message in app.flashes('privmessage') %}
+              <div class=" alert alert-warning ">
+                  {{ message }}
+              </div>
+          {% endfor %}
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Gestion des bon sortie</h3>
+
+            <div class="float-right">
+                <button class="btn btn-info" onclick="window.location.reload()" ><span> <i class="fas fa-sync-alt"></i></span> Recharger </button>
+                <button class="btn btn-success" id="btn_new_bon_sortie" > Ajouter <span><i class="fas fa-plus"></i> </span></button>
+
+            </div>
+          {# <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div> #}
+        </div>
+        <div class="card-body">
+          <table id="table_bon_sortie" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Observation</th>
+                    <th>Methode de paiement</th>
+                    <th class="datatable-nosort">Operations </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for b in bonSorties %}
+                      <tr> 
+                        <td> {{b.observation}}</td>
+                        <td> {{b.Facture.ModePaiment.libelle}}</td>
+                        <td> 
+                            <button data-id="{{b.id}}" class="btn btn-primary btn_update_bon_sort"> <span><i class="fas fa-pencil-alt"></i> </span></button>
+                            <button data-id="{{b.id}}" class="btn btn-danger btn_delete_bon_sortie" > <span><i class="fas fa-trash"></i> </span></button>
+                            <button data-id="{{b.id}}"  class="btn btn-success btn_addDetailsBonSort list_bon_sortie" > <span><i class="fas fa-list-alt"></i></span></button>
+                            <button data-id="{{b.id}}"  class="btn btn-warning btn_facture" > <span><i class="fas fa-file-invoice-dollar"></i></span></button>
+                        </td>
+                        
+                    </tr>
+                      
+                  {% endfor %}
+
+                  </tbody>
+                 
+                </table>
+        </div>
+        <!-- /.card-body -->
+        {# <div class="card-footer">
+          Footer
+        </div> #}
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+ <div class="modal fade" id="modal_new_bon_sortie">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Nouveau Bon de sortie</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="form_new_bon_sortie">
+            <div class="modal-body">
+                <div class="row">
+                  <div class="col-12">
+                        <div class="form-group">
+                            <label>Observation</label>
+                            <input class="form-control"  name="observation" id="observationBs">
+                            <small class="error_text text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                            <div class="form-group">
+                                <label>Methode de paiement</label>
+                                <select class="form-control" name="MethodeP" id="MethodeP" data-placeholder="choisir un article" >
+                                    {% for m in modePayement %}
+                                        <option value="{{m.id}}">{{m.libelle}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+{# update bon sort  #}
+<div class="modal fade" id="modal_update_bon_sortie">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Modifie Bon de sortie</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="form_update_bon_sortie">
+              <div class="modal-body">
+                <input type="hidden" id="bon_sort_id" name="bon_sort_id">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Observation</label>
+                    <input class="form-control"  name="observation" id="observation">
+                            <small class="error_text text-danger"></small>
+                  </div>
+                </div>
+                 <div class="col-12">
+                            <div class="form-group">
+                                <label>Methode de paiement</label>
+                                <select class="form-control" name="eMethodeP" id="eMethodeP" data-placeholder="choisir un article" >
+                                    {% for m in modePayement %}
+                                        <option value="{{m.id}}">{{m.libelle}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+<div class="modal fade" id="modal_new_bon_sortiedetail">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Details Bon de sortie</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Form for new exit voucher details -->
+            <form id="form_new_bonSortDetails">
+                <div class="modal-body">
+                    <input type="hidden" id="bon_sortD_id" name="bon_sortD_id">
+
+                    <!-- Quantity input field -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Quantite</label>
+                                <input class="form-control" name="quantite" id="quantiteDbs">
+                            <small class="error_text text-danger"></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Article selection field -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Article</label>
+                                <select class="form-control select2" name="article" id="article" data-placeholder="choisir un article" >
+                                    {% for a in articles %}
+                                        <option value="{{a.id}}">{{a.nom}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer with save button -->
+                <div class="modal-footer justify-content-between">
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                </div>
+            </form>
+
+            <!-- Card displaying list of exit voucher details -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Liste des details de bons de sortie</h3>
+                </div>
+                <div class="card-body">
+                    <table id="table_list_detail" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Quantite</th>
+                                <th>Article</th>
+                                <th class="datatable-nosort">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic content goes here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Close button for the modal -->
+            <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+        </div>
+    </div>
+</div>
+
+
+ <div class="modal fade" id="modal_facture">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facture</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <div class="row"> 
+                <div class="col-12">
+                <div id="imprimer_facture">
+                  <table class="table table-striped" id="table_facture">
+                    <thead>
+                      <th> Article</th>
+                      <th> Prix</th>
+                      <th> Quantite</th>
+                      <th> Sous total</th>
+                      
+                    </thead>
+                    <tbody>
+                      {# <tr> 
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr> #}
+                      {# <tr class="nostriped"> 
+                        <td  colspan="3">Total HT</td>
+                        <td></td>
+                      </tr>
+                      <tr class="nostriped"> 
+                        <td colspan="3">TVA</td>
+                        <td>20%</td>
+                      </tr>
+                        <tr class="nostriped"> 
+                        <td colspan="3">Total TTC</td>
+                        <td></td>
+                      </tr> #}
+                    </tbody>
+                    
+                    
+                  </table>
+                </div>
+                  <div id="">
+                    <button type="submit" class="btn btn-primary btn-block w-75 mx-auto" id="btn_imprimer">Imprimer</button>
+                  </div>
+                </div>
+             </div>
+                {# <table>
+                  <thead>
+                    <th colspan="3">Totale ht</th>
+                    <th></th>
+                  </thead>
+                </table> #}
+            </div>
+           
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+    <footer class="main-footer">
+      {# <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.2.0
+      </div> #}
+      <strong>Copyright &copy; 2024 <a href="http://127.0.0.1:8000/">Marrakech Distribution</a>.</strong> All rights reserved.
+    </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- jQuery -->
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+
+<!-- DataTables  & Plugins -->
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+<!-- Bootstrap 4 -->
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{{asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
+
+<script>  
+  const url_delete_bonS = `{{path('delete_bonS',{id:'pid'})}}`
+  const facture_url = `{{path('facture_list',{id:'pid'})}}`
+  const url_delete_detail_bonS = `{{path('delete_detail_bonS',{id:'pid'})}}`
+  const url = `{{path('new_bon_sortie')}}`
+  const url_list_detail = `{{path('details_bon_sortie', {id:'pid'})}}`
+  const url_detail = `{{path('new_detail_bon_sortie')}}`
+    const url_update = `{{path('update_bon_sort')}}`
+  const url_info = `{{path('info_bon_sort')}}` 
+   const bonSortie = `{{path("bonsortie")}}`
+
+</script>
+
+<!-- Inclure SweetAlert via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{asset('main/js/bonSortie.js')}}"> </script>
+
+
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2({
+      theme: 'bootstrap4'
+    })})
+</script>
+</body>
+</html>

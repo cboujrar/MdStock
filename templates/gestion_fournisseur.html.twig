@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}
+    <title>Gestion Fournisseur</title>
+  {% endblock %}
+  {% block stylsheets %}
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('main/css/main.css')}}">
+
+     <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+  {% endblock %}
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+<div class="my-loader">
+<img src="{{asset("main/loader.gif")}}" >
+</div>
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      {# <li class="nav-item d-none d-sm-inline-block">
+        <a href="../../index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li> #}
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      {# <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li> #}
+
+      <!-- Messages Dropdown Menu -->
+          {{ include("include/dropdown_message.html.twig") }}
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+             {{ include("include/nav.html.twig") }}
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Fournisseur</h1>
+          </div>
+                <div class="col-sm-6">
+            {% for message in app.flashes('privmessage') %}
+              <div class=" alert alert-warning ">
+                  {{ message }}
+              </div>
+          {% endfor %}
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Gestion des fournisseur</h3>
+            <div class="float-right">
+                <button class="btn btn-info" onclick="window.location.reload()" ><span> <i class="fas fa-sync-alt"></i></span> Recharger </button>
+                <button class="btn btn-success" id="btn_new_fournisseur" > Ajouter <span><i class="fas fa-plus"></i> </span></button>
+
+            </div>
+        
+
+          {# <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div> #}
+        </div>
+        <div class="card-body">
+          {# html diali #}
+         <table id="table_fournisseur" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Nom </th>
+                    <th>Adresse </th>
+                    <th>Telephone </th>
+                    <th>Email </th>
+                    <th class="datatable-nosort">Operations </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for f in fournisseur %}
+                      <tr> 
+                      <td> {{f.nomFournisseur}}</td>
+                      <td> {{f.adresse}}</td>
+                      <td> {{f.telephone}}</td>
+                      <td> {{f.email}}</td>
+                      <td> 
+                        <button data-id="{{f.id}}" class="btn btn-primary btn_update_fournisseur"> <span><i class="fas fa-pencil-alt"></i> </span></button>
+                        <button data-id="{{f.id}}" class="btn btn-danger btn_delete_fournisseur" > <span><i class="fas fa-trash"></i> </span></button>
+                      </td>
+                      
+                    </tr>
+                      
+                    </tr>
+                  {% endfor %}
+
+                  </tbody>
+                 
+                </table>
+        </div>
+
+        <!-- /.card-body -->
+        <div class="card-footer">
+          
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  {# start madal #}
+ {# <div class="modal fade" id="modal_new_fournisseur">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Nouvelle Fournisseur</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="form_new_fournisseur">
+            <div class="modal-body">
+              <label>Le nom:</label>
+              <input name="nom"><br>
+              <label>L'adresse:</label>
+              <input name="adresse"><br>
+              <label>Le telephone:</label>
+              <input name="telephone"><br>
+              <label>L'emaill:</label>
+              <input name="email" >
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal --> #}
+
+<div class="modal fade" id="modal_new_fournisseur" tabindex="-1" role="dialog" aria-labelledby="modalNewFournisseurLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNewFournisseurLabel">Nouveau Fournisseur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form_new_fournisseur">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input type="text" class="form-control" name="nom" id="newNom">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Adresse</label>
+                        <input type="text" class="form-control" name="adresse" id="newAdress">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" class="form-control" name="telephone" id="newTelephone">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" id="newEmail">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+      {# end modal #}
+       {# start madal #}
+ {# <div class="modal fade" id="modal_update_fournisseur">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Modifie Fournisseur</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="form_update_fournisseur">
+            <div class="modal-body">
+            <input type="hidden" id="fournisseur_id" name="id_four">
+              <label>Le nom:</label>
+              <input name="nom" id="nom"><br>
+              <label>L'adresse:</label>
+              <input name="adresse" id="adresse"><br>
+              <label>Le telephone:</label>
+              <input name="telephone" id="telephone"><br>
+              <label>L'emaill:</label>
+              <input name="email" id="email">
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal --> #}
+
+    <div class="modal fade" id="modal_update_fournisseur" tabindex="-1" role="dialog" aria-labelledby="modalUpdateFournisseurLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalUpdateFournisseurLabel">Modifier Fournisseur</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form_update_fournisseur">
+                <div class="modal-body">
+                    <input type="hidden" id="fournisseur_id" name="id_four">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="adresse">Adresse</label>
+                        <input type="text" class="form-control" id="adresse" name="adresse">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">Téléphone</label>
+                        <input type="number" class="form-control" id="telephone" name="telephone">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                        <small class="error_text text-danger"></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+      {# end modal #}
+    <footer class="main-footer">
+      {# <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.2.0
+      </div> #}
+      <strong>Copyright &copy; 2024 <a href="http://127.0.0.1:8000/">Marrakech Distribution</a>.</strong> All rights reserved.
+    </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- AdminLTE for demo purposes -->
+{# <script src="{{asset('dist/js/demo.js')}}"></script> #}
+<!-- jQuery -->
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+
+<!-- DataTables  & Plugins -->
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+
+<script>  
+  const url = `{{path('new_fournisseur')}}` 
+  const url_delete = `{{path('delete_fournisseur',{id:'pid'})}}`
+  const url_update = `{{path('update_fournisseur')}}`
+  const url_info = `{{path('info_fournisseur')}}`
+  const fournisseur = `{{path("fournisseur")}}`
+</script>
+<!-- Inclure SweetAlert via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{{asset('main/js/fournisseur.js')}}"> </script>
+</body>
+</html>

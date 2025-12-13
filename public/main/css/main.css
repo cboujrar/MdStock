@@ -1,0 +1,27 @@
+.article_image{
+    width: 15%;
+}
+
+.nostriped{
+    background-color: transparent !important;
+}
+
+.my-loader{
+      background: rgb(0,0,0,.3);
+    position: relative;
+    position: absolute;
+    z-index: 9999999999;
+    height: 100%;
+    /* left: 40%; */
+    /* top: 40%; */
+    width: 100%;
+    display:none
+}
+.my-loader img{
+     position: absolute;
+     left: 40%; 
+     top: 40%; 
+}
+.priv{
+    cursor: pointer;
+}
